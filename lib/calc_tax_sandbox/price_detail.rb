@@ -1,5 +1,5 @@
 module CalcTaxSandbox
-  class Price
+  class PriceDetail
     attr_reader :without_tax, :tax
 
     def initialize(without_tax, tax, keigen: false)
@@ -17,7 +17,7 @@ module CalcTaxSandbox
     end
 
     def ==(other)
-      if other.is_a?(Price)
+      if other.is_a?(PriceDetail)
         without_tax == other.without_tax && tax == other.tax && keigen? == other.keigen?
       else
         false

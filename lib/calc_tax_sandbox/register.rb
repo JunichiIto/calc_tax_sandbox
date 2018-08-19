@@ -8,12 +8,13 @@ module CalcTaxSandbox
     end
 
     def add(item, quantity)
-      @sales_rows << SalesRow.new(item, quantity)
+      price_detail = item.price_detail(on: @current_date)
+      @sales_rows << SalesRow.new(item, price_detail, quantity)
     end
 
     def total
       @sales_rows.sum do |row|
-        row.item.price_with_tax(on: @current_date).with_tax * row.quantity
+        row.price_detail.with_tax * row.quantity
       end
     end
 
@@ -31,9 +32,9 @@ module CalcTaxSandbox
       rows << ''
       @sales_rows.each do |row|
         item = row.item
-        price_with_tax = item.price_with_tax(on: @current_date)
-        total = price_with_tax.with_tax * row.quantity
-        rows << "#{item.name}#{'※' if price_with_tax.keigen?} #{row.quantity} #{total}"
+        price_detail = row.price_detail
+        total = price_detail.with_tax * row.quantity
+        rows << "#{item.name}#{'※' if price_detail.keigen?} #{row.quantity} #{total}"
       end
       rows << "合計 #{total}"
       rows << ''
@@ -53,21 +54,17 @@ module CalcTaxSandbox
     private
 
     def keigen_sub_total
-      rows = @sales_rows.select { |row| keigen_row?(row) }
-      total = rows.sum { |row| row.item.price_with_tax(on: @current_date).with_tax }
-      tax = rows.sum { |row| row.item.price_with_tax(on: @current_date).tax }
+      rows = @sales_rows.select(&:keigen?)
+      total = rows.sum { |row| row.price_detail.with_tax }
+      tax = rows.sum { |row| row.price_detail.tax }
       [total, tax]
     end
 
     def standard_sub_total
-      rows = @sales_rows.reject { |row| keigen_row?(row) }
-      total = rows.sum { |row| row.item.price_with_tax(on: @current_date).with_tax }
-      tax = rows.sum { |row| row.item.price_with_tax(on: @current_date).tax }
+      rows = @sales_rows.reject(&:keigen?)
+      total = rows.sum { |row| row.price_detail.with_tax }
+      tax = rows.sum { |row| row.price_detail.tax }
       [total, tax]
-    end
-
-    def keigen_row?(row)
-      row.item.price_with_tax(on: @current_date).keigen?
     end
   end
 end
