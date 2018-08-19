@@ -5,19 +5,12 @@ module CalcTaxSandbox
     def initialize(current_date = Date.today)
       @current_date = current_date
       @sales_rows = []
-      @keigen_rows = []
-      @standard_rows = []
     end
 
     def add(item, quantity)
       post_tax_price = item.post_tax_price(on: @current_date)
       row = SalesRow.new(item, post_tax_price, quantity)
       @sales_rows << row
-      if post_tax_price.keigen?
-        @keigen_rows << row
-      else
-        @standard_rows << row
-      end
     end
 
     def total
@@ -43,9 +36,9 @@ module CalcTaxSandbox
       end
       rows << "合計 #{total}"
       rows << ''
-      rows << print_sub_total(@keigen_rows, OLD_TAX_RATE)
+      rows << print_sub_total(keigen_rows, OLD_TAX_RATE)
       rows << ''
-      rows << print_sub_total(@standard_rows, NEW_TAX_RATE)
+      rows << print_sub_total(standard_rows, NEW_TAX_RATE)
       rows << ''
       rows << "お預り #{@paid}"
       rows << "お釣 #{change}"
@@ -73,6 +66,14 @@ module CalcTaxSandbox
       total = sales_rows.sum { |row| row.post_tax_price.with_tax }
       tax = sales_rows.sum { |row| row.post_tax_price.tax }
       [total, tax]
+    end
+
+    def keigen_rows
+      @sales_rows.select { |row| row.post_tax_price.keigen? }
+    end
+
+    def standard_rows
+      @sales_rows.reject { |row| row.post_tax_price.keigen? }
     end
   end
 end
