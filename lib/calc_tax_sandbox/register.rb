@@ -55,14 +55,14 @@ module CalcTaxSandbox
     private
 
     def keigen_sub_total
-      rows = @sales_rows.select(&:keigen?)
-      total = rows.sum { |row| row.price_detail.with_tax }
-      tax = rows.sum { |row| row.price_detail.tax }
-      [total, tax]
+      sub_total(@sales_rows.select(&:keigen?))
     end
 
     def standard_sub_total
-      rows = @sales_rows.reject(&:keigen?)
+      sub_total(@sales_rows.reject(&:keigen?))
+    end
+
+    def sub_total(rows)
       total = rows.sum { |row| row.price_detail.with_tax }
       tax = rows.sum { |row| row.price_detail.tax }
       [total, tax]
