@@ -9,6 +9,10 @@ module CalcTaxSandbox
       @price = price
     end
 
+    def price_with_tax(on: Date.today, **params)
+      price_detail(on: on, **params).with_tax
+    end
+
     def price_detail(on: Date.today, **params)
       use_old_rule = on < NEW_RULE_START_DATE
       keigen = !use_old_rule && keigen?(params)

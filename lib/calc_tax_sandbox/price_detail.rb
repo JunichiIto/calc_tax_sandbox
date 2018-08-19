@@ -15,13 +15,5 @@ module CalcTaxSandbox
     def with_tax
       without_tax + tax
     end
-
-    def ==(other)
-      if other.is_a?(PriceDetail)
-        without_tax == other.without_tax && tax == other.tax && keigen? == other.keigen?
-      else
-        false
-      end
-    end
   end
 end
