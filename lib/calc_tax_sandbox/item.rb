@@ -7,9 +7,13 @@ module CalcTaxSandbox
       @price = price
     end
 
-    def price_with_tax(on: Date.today)
-      rate = on < Date.new(2019, 10, 1) ? 1.08 : 1.1
+    def price_with_tax(on: Date.today, **params)
+      rate = on < Date.new(2019, 10, 1) ? 1.08 : adjustable_tax_rate(params)
       (price * rate).floor
+    end
+
+    def adjustable_tax_rate(**)
+      1.1
     end
   end
 end
