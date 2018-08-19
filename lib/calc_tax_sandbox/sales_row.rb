@@ -11,5 +11,9 @@ module CalcTaxSandbox
     def keigen?
       post_tax_price.keigen?
     end
+
+    def total
+      post_tax_price.with_tax * quantity
+    end
   end
 end

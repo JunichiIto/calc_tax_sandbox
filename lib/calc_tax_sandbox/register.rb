@@ -14,9 +14,7 @@ module CalcTaxSandbox
     end
 
     def total
-      @sales_rows.sum do |row|
-        row.post_tax_price.with_tax * row.quantity
-      end
+      @sales_rows.sum(&:total)
     end
 
     def pay(paid)
@@ -48,10 +46,8 @@ module CalcTaxSandbox
     private
 
     def format_sales_row(row)
-      post_tax_price = row.post_tax_price
-      total = post_tax_price.with_tax * row.quantity
-      keigen_mark = post_tax_price.keigen? ? '※' : ''
-      "#{row.item.name}#{keigen_mark} #{row.quantity} #{total}"
+      keigen_mark = row.keigen? ? '※' : ''
+      "#{row.item.name}#{keigen_mark} #{row.quantity} #{row.total}"
     end
 
     def print_sub_total(sales_rows, tax_rate)
