@@ -12,7 +12,7 @@ module CalcTaxSandbox
       (price * rate).floor
     end
 
-    def keigen?(**)
+    def keigen?(*)
       false
     end
   end

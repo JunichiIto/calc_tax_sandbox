@@ -9,8 +9,8 @@ module CalcTaxSandbox
       @alcohol
     end
 
-    def keigen?(**params)
-      !alcohol? && !params[:eating_out]
+    def keigen?(**options)
+      !alcohol? && !options[:eating_out]
     end
   end
 end

@@ -7,7 +7,7 @@ module CalcTaxSandbox
       @per_week = per_week
     end
 
-    def keigen?(**)
+    def keigen?(*)
       per_week >= 2
     end
   end
