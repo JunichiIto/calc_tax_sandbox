@@ -34,7 +34,8 @@ module CalcTaxSandbox
         item = row.item
         price_detail = row.price_detail
         total = price_detail.with_tax * row.quantity
-        rows << "#{item.name}#{'※' if price_detail.keigen?} #{row.quantity} #{total}"
+        keigen_mark = price_detail.keigen? ? '※' : ''
+        rows << "#{item.name}#{keigen_mark} #{row.quantity} #{total}"
       end
       rows << "合計 #{total}"
       rows << ''
