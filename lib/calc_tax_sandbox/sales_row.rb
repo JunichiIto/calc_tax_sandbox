@@ -15,5 +15,9 @@ module CalcTaxSandbox
     def total
       post_tax_price.with_tax * quantity
     end
+
+    def total_tax
+      post_tax_price.tax * quantity
+    end
   end
 end

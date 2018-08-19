@@ -59,8 +59,8 @@ module CalcTaxSandbox
     end
 
     def sub_total(sales_rows)
-      total = sales_rows.sum { |row| row.post_tax_price.with_tax }
-      tax = sales_rows.sum { |row| row.post_tax_price.tax }
+      total = sales_rows.sum(&:total)
+      tax = sales_rows.sum(&:total_tax)
       [total, tax]
     end
 
