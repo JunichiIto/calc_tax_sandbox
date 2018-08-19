@@ -46,8 +46,9 @@ RSpec.describe CalcTaxSandbox::Item do
       end
     end
     context '新聞の定期購読だった場合' do
+      let(:item) { CalcTaxSandbox::NewspaperSubscription.new('Ruby新聞', 5000, per_week: per_week) }
       context '週1回発行の場合' do
-        let(:item) { CalcTaxSandbox::NewspaperSubscription.new('Ruby新聞', 5000, per_week: 1) }
+        let(:per_week) { 1 }
         context '税率変更前の場合' do
           let(:date) { date_20190930 }
           it { is_expected.to eq 5400 }
@@ -58,7 +59,7 @@ RSpec.describe CalcTaxSandbox::Item do
         end
       end
       context '週2回発行の場合' do
-        let(:item) { CalcTaxSandbox::NewspaperSubscription.new('Ruby新聞', 5000, per_week: 2) }
+        let(:per_week) { 2 }
         context '税率変更前の場合' do
           let(:date) { date_20190930 }
           it { is_expected.to eq 5400 }
