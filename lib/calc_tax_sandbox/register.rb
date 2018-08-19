@@ -65,11 +65,11 @@ module CalcTaxSandbox
     end
 
     def keigen_rows
-      @sales_rows.select { |row| row.post_tax_price.keigen? }
+      @sales_rows.select(&:keigen?)
     end
 
     def standard_rows
-      @sales_rows.reject { |row| row.post_tax_price.keigen? }
+      @sales_rows.reject(&:keigen?)
     end
   end
 end
