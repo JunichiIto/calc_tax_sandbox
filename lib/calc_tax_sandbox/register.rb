@@ -32,11 +32,17 @@ module CalcTaxSandbox
       @sales_rows.each do |row|
         rows << format_sales_row(row)
       end
+      rows << ''
       rows << "合計 #{total}"
-      rows << ''
-      rows << print_sub_total(keigen_rows, OLD_TAX_RATE)
-      rows << ''
-      rows << print_sub_total(standard_rows, NEW_TAX_RATE)
+      if @current_date < NEW_RULE_START_DATE
+        tax = @sales_rows.sum(&:total_tax)
+        rows << print_tax_total(tax)
+      else
+        rows << ''
+        rows << print_sub_total(keigen_rows, OLD_TAX_RATE)
+        rows << ''
+        rows << print_sub_total(standard_rows, NEW_TAX_RATE)
+      end
       rows << ''
       rows << "お預り #{@paid}"
       rows << "お釣 #{change}"
@@ -54,8 +60,12 @@ module CalcTaxSandbox
       sub_total, tax = sub_total(sales_rows)
       <<~TEXT.chomp
         #{tax_rate}%対象 #{sub_total}
-        （内消費税額 #{tax}）
+        #{print_tax_total(tax)}
       TEXT
+    end
+
+    def print_tax_total(tax)
+      "（内消費税額 #{tax}）"
     end
 
     def sub_total(sales_rows)
