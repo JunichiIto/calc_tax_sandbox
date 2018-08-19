@@ -1,5 +1,5 @@
 module CalcTaxSandbox
-  class PriceDetail
+  class PostTaxPrice
     attr_reader :without_tax, :tax
 
     def initialize(without_tax, tax, keigen: false)

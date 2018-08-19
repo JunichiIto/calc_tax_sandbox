@@ -1,15 +1,15 @@
 module CalcTaxSandbox
   class SalesRow
-    attr_reader :item, :price_detail, :quantity
+    attr_reader :item, :post_tax_price, :quantity
 
-    def initialize(item, price_detail, quantity)
+    def initialize(item, post_tax_price, quantity)
       @item = item
-      @price_detail = price_detail
+      @post_tax_price = post_tax_price
       @quantity = quantity
     end
 
     def keigen?
-      price_detail.keigen?
+      post_tax_price.keigen?
     end
   end
 end

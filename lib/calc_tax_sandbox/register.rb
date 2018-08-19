@@ -10,10 +10,10 @@ module CalcTaxSandbox
     end
 
     def add(item, quantity)
-      price_detail = item.price_detail(on: @current_date)
-      row = SalesRow.new(item, price_detail, quantity)
+      post_tax_price = item.post_tax_price(on: @current_date)
+      row = SalesRow.new(item, post_tax_price, quantity)
       @sales_rows << row
-      if price_detail.keigen?
+      if post_tax_price.keigen?
         @keigen_rows << row
       else
         @standard_rows << row
@@ -22,7 +22,7 @@ module CalcTaxSandbox
 
     def total
       @sales_rows.sum do |row|
-        row.price_detail.with_tax * row.quantity
+        row.post_tax_price.with_tax * row.quantity
       end
     end
 
@@ -55,9 +55,9 @@ module CalcTaxSandbox
     private
 
     def format_sales_row(row)
-      price_detail = row.price_detail
-      total = price_detail.with_tax * row.quantity
-      keigen_mark = price_detail.keigen? ? '※' : ''
+      post_tax_price = row.post_tax_price
+      total = post_tax_price.with_tax * row.quantity
+      keigen_mark = post_tax_price.keigen? ? '※' : ''
       "#{row.item.name}#{keigen_mark} #{row.quantity} #{total}"
     end
 
@@ -70,8 +70,8 @@ module CalcTaxSandbox
     end
 
     def sub_total(sales_rows)
-      total = sales_rows.sum { |row| row.price_detail.with_tax }
-      tax = sales_rows.sum { |row| row.price_detail.tax }
+      total = sales_rows.sum { |row| row.post_tax_price.with_tax }
+      tax = sales_rows.sum { |row| row.post_tax_price.tax }
       [total, tax]
     end
   end

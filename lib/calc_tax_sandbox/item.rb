@@ -10,15 +10,15 @@ module CalcTaxSandbox
     end
 
     def price_with_tax(on: Date.today, **params)
-      price_detail(on: on, **params).with_tax
+      post_tax_price(on: on, **params).with_tax
     end
 
-    def price_detail(on: Date.today, **params)
+    def post_tax_price(on: Date.today, **params)
       use_old_rule = on < NEW_RULE_START_DATE
       keigen = !use_old_rule && keigen?(params)
       rate = use_old_rule || keigen ? OLD_TAX_RATE : NEW_TAX_RATE
       tax = (price * rate / 100.0).floor
-      PriceDetail.new(price, tax, keigen: keigen)
+      PostTaxPrice.new(price, tax, keigen: keigen)
     end
 
     def keigen?(*)

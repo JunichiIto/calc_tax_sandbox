@@ -1,4 +1,4 @@
-require './lib/calc_tax_sandbox/price_detail'
+require './lib/calc_tax_sandbox/post_tax_price'
 require './lib/calc_tax_sandbox/item'
 require './lib/calc_tax_sandbox/food'
 require './lib/calc_tax_sandbox/newspaper_subscription'
