@@ -13,21 +13,21 @@ RSpec.describe CalcTaxSandbox::Register do
     expect(register.change).to eq 126
 
     expected = <<~TEXT.chomp
-2019年10月01日
+      2019年10月01日
 
-ヨーグルト※ 1 108
-カップラーメン※ 1 216
-ペットフード 1 550
-合計 874
+      ヨーグルト※ 1 108
+      カップラーメン※ 1 216
+      ペットフード 1 550
+      合計 874
 
-8%対象 324
-（内消費税額 24）
+      8%対象 324
+      （内消費税額 24）
 
-10%対象 550
-（内消費税額 50）
+      10%対象 550
+      （内消費税額 50）
 
-お預り 1000
-お釣 126
+      お預り 1000
+      お釣 126
     TEXT
     expect(register.print_receipt).to eq expected
   end
