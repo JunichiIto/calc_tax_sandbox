@@ -8,7 +8,7 @@ module CalcTaxSandbox
     end
 
     def add(item, quantity)
-      post_tax_price = item.post_tax_price(on: @current_date)
+      post_tax_price = item.build_post_tax_price(on: @current_date)
       row = SalesRow.new(item, post_tax_price, quantity)
       @sales_rows << row
     end
