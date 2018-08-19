@@ -2,8 +2,8 @@ require 'date'
 
 RSpec.describe CalcTaxSandbox::Item do
   describe '#price_with_tax' do
-    subject { item.price_with_tax(on: date, **params) }
-    let(:params) { {} }
+    subject { item.price_with_tax(on: date, **options) }
+    let(:options) { {} }
     let(:date_20190930) { Date.new(2019, 9, 30) }
     let(:date_20191001) { Date.new(2019, 10, 1) }
     context '食品でも新聞でもない場合' do
@@ -39,7 +39,7 @@ RSpec.describe CalcTaxSandbox::Item do
           let(:date) { date_20191001 }
           it { is_expected.to eq 324 }
           context '外食だった場合' do
-            let(:params) { { eating_out: true } }
+            let(:options) { { eating_out: true } }
             it { is_expected.to eq 330 }
           end
         end
