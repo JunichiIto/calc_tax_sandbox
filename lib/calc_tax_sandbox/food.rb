@@ -9,8 +9,8 @@ module CalcTaxSandbox
       @alcohol
     end
 
-    def adjustable_tax_rate(**params)
-      alcohol? || params[:eating_out] ? super : 1.08
+    def keigen?(**params)
+      !alcohol? && !params[:eating_out]
     end
   end
 end

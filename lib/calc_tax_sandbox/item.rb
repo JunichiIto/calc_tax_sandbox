@@ -8,12 +8,12 @@ module CalcTaxSandbox
     end
 
     def price_with_tax(on: Date.today, **params)
-      rate = on < Date.new(2019, 10, 1) ? 1.08 : adjustable_tax_rate(params)
+      rate = on < Date.new(2019, 10, 1) || keigen?(params) ? 1.08 : 1.1
       (price * rate).floor
     end
 
-    def adjustable_tax_rate(**)
-      1.1
+    def keigen?(**)
+      false
     end
   end
 end

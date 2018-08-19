@@ -7,8 +7,8 @@ module CalcTaxSandbox
       @per_week = per_week
     end
 
-    def adjustable_tax_rate(**)
-      per_week < 2 ? super : 1.08
+    def keigen?(**)
+      per_week >= 2
     end
   end
 end
