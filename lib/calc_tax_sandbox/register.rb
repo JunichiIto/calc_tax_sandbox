@@ -31,21 +31,13 @@ module CalcTaxSandbox
       rows << @current_date.strftime('%Y年%m月%d日')
       rows << ''
       @sales_rows.each do |row|
-        item = row.item
-        price_detail = row.price_detail
-        total = price_detail.with_tax * row.quantity
-        keigen_mark = price_detail.keigen? ? '※' : ''
-        rows << "#{item.name}#{keigen_mark} #{row.quantity} #{total}"
+        rows << format_sales_row(row)
       end
       rows << "合計 #{total}"
       rows << ''
-      sub_total, tax = keigen_sub_total
-      rows << "#{OLD_TAX_RATE}%対象 #{sub_total}"
-      rows << "（内消費税額 #{tax}）"
+      rows << print_sub_total(*keigen_sub_total, OLD_TAX_RATE)
       rows << ''
-      sub_total, tax = standard_sub_total
-      rows << "#{NEW_TAX_RATE}%対象 #{sub_total}"
-      rows << "（内消費税額 #{tax}）"
+      rows << print_sub_total(*standard_sub_total, NEW_TAX_RATE)
       rows << ''
       rows << "お預り #{@paid}"
       rows << "お釣 #{change}"
@@ -53,6 +45,20 @@ module CalcTaxSandbox
     end
 
     private
+
+    def format_sales_row(row)
+      price_detail = row.price_detail
+      total = price_detail.with_tax * row.quantity
+      keigen_mark = price_detail.keigen? ? '※' : ''
+      "#{row.item.name}#{keigen_mark} #{row.quantity} #{total}"
+    end
+
+    def print_sub_total(sub_total, tax, tax_rate)
+      rows = []
+      rows << "#{tax_rate}%対象 #{sub_total}"
+      rows << "（内消費税額 #{tax}）"
+      rows.join("\n")
+    end
 
     def keigen_sub_total
       sub_total(@sales_rows.select(&:keigen?))
