@@ -13,7 +13,7 @@ RSpec.describe CalcTaxSandbox::Register do
       register.pay(2000)
       expect(register.change).to eq 488
 
-      expected = <<~TEXT.chomp
+      expected = <<~TEXT
         2019年09月30日
 
         ヨーグルト 2 216
@@ -44,7 +44,7 @@ RSpec.describe CalcTaxSandbox::Register do
       register.pay(1000)
       expect(register.change).to eq 126
 
-      expected = <<~TEXT.chomp
+      expected = <<~TEXT
         2019年10月01日
 
         ヨーグルト※ 1 108
@@ -79,7 +79,7 @@ RSpec.describe CalcTaxSandbox::Register do
         register.pay(2000)
         expect(register.change).to eq 468
 
-        expected = <<~TEXT.chomp
+        expected = <<~TEXT
           2019年10月01日
 
           ヨーグルト※ 2 216

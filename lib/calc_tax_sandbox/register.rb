@@ -1,4 +1,5 @@
 require 'date'
+require 'stringio'
 
 module CalcTaxSandbox
   class Register
@@ -26,27 +27,29 @@ module CalcTaxSandbox
     end
 
     def print_receipt
-      rows = []
-      rows << @current_date.strftime('%Y年%m月%d日')
-      rows << ''
+      io = StringIO.new
+
+      io.puts @current_date.strftime('%Y年%m月%d日')
+      io.puts
       @sales_rows.each do |row|
-        rows << format_sales_row(row)
+        io.puts format_sales_row(row)
       end
-      rows << ''
-      rows << "合計 #{total}"
+      io.puts
+      io.puts "合計 #{total}"
       if @current_date < NEW_RULE_START_DATE
         tax = @sales_rows.sum(&:total_tax)
-        rows << print_tax_total(tax)
+        io.puts print_tax_total(tax)
       else
-        rows << ''
-        rows << print_sub_total(keigen_rows, OLD_TAX_RATE)
-        rows << ''
-        rows << print_sub_total(standard_rows, NEW_TAX_RATE)
+        io.puts
+        io.puts print_sub_total(keigen_rows, OLD_TAX_RATE)
+        io.puts
+        io.puts print_sub_total(standard_rows, NEW_TAX_RATE)
       end
-      rows << ''
-      rows << "お預り #{@paid}"
-      rows << "お釣 #{change}"
-      rows.join("\n")
+      io.puts
+      io.puts "お預り #{@paid}"
+      io.puts "お釣 #{change}"
+
+      io.string
     end
 
     private
