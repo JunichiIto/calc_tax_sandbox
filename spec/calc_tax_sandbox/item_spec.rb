@@ -6,6 +6,7 @@ RSpec.describe CalcTaxSandbox::Item do
     let(:options) { {} }
     let(:date_20190930) { Date.new(2019, 9, 30) }
     let(:date_20191001) { Date.new(2019, 10, 1) }
+
     context '食品でも新聞でもない場合' do
       let(:item) { CalcTaxSandbox::Item.new('プロを目指す人のためのRuby入門', 2980) }
       context '税率変更前の場合' do
@@ -17,6 +18,7 @@ RSpec.describe CalcTaxSandbox::Item do
         it { is_expected.to eq 3278 }
       end
     end
+
     context '食品だった場合' do
       context '酒類だった場合' do
         let(:item) { CalcTaxSandbox::Food.new('ビール', 300, alcohol: true) }
@@ -45,6 +47,7 @@ RSpec.describe CalcTaxSandbox::Item do
         end
       end
     end
+
     context '新聞の定期購読だった場合' do
       let(:item) { CalcTaxSandbox::NewspaperSubscription.new('Ruby新聞', 5000, per_week: per_week) }
       context '週1回発行の場合' do
